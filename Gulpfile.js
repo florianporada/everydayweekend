@@ -22,7 +22,7 @@ gulp.task('sass', function () {
 
 // Minify CSS
 gulp.task('minify-css', function() {
-    return gulp.src('dist/assets/css/*.css')
+    return gulp.src('dist/assets/css/main.css')
         .pipe(cleanCSS({compatibility: 'ie8'}))
         .pipe(concat('main.min.css'))
         .pipe(gulp.dest('dist/assets/css'));
@@ -45,15 +45,20 @@ gulp.task('copy-index', function() {
 });
 
 // Distribution task
-gulp.task('dist', function() {
+gulp.task('dist', ['scripts', 'sass', 'minify-css'], function() {
     gulp.src('./index.html')
         .pipe(gulp.dest('./dist'));
     gulp.src('./src/assets/img/*')
         .pipe(gulp.dest('./dist/assets/img'));
-    gulp.src(['./bower_components/jquery/dist/jquery.min.js', './bower_components/tether/dist/js/tether.min.js'])
-        .pipe(gulp.dest('./dist/assets/js/vendor'));
-    
-    //add vendor assets here
+    // JS vendors
+    gulp.src(['./bower_components/jquery/dist/jquery.min.js', './bower_components/tether/dist/js/tether.min.js', './bower_components/bootstrap/dist/js/bootstrap.min.js'])
+        .pipe(gulp.dest('./dist/assets/js'));
+    // CSS vendors
+    gulp.src(['./bower_components/bootstrap/dist/css/bootstrap.min.css', './bower_components/tether/dist/css/tether.min.css', './bower_components/font-awesome/css/font-awesome.min.css'])
+        .pipe(gulp.dest('./dist/assets/css'));
+    // Font vendors
+    gulp.src(['./bower_components/font-awesome/fonts/*.{otf,eot,svg,ttf,woff,woff2}'])
+        .pipe(gulp.dest('./dist/assets/fonts'));
 });
 
 
