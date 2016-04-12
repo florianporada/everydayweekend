@@ -38,12 +38,31 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest('dist/assets/js/'))
 });
 
+// index to dist
+gulp.task('copy-index', function() {
+    gulp.src('./index.html')
+        .pipe(gulp.dest('./dist'));
+});
+
+// Distribution task
+gulp.task('dist', function() {
+    gulp.src('./index.html')
+        .pipe(gulp.dest('./dist'));
+    gulp.src('./src/assets/img/*')
+        .pipe(gulp.dest('./dist/assets/img'));
+    gulp.src(['./bower_components/jquery/dist/jquery.min.js', './bower_components/tether/dist/js/tether.min.js'])
+        .pipe(gulp.dest('./dist/assets/js/vendor'));
+    
+    //add vendor assets here
+});
+
+
 // Watcher
 gulp.task('watch', function() {
-    gulp.watch('src/assets/scss/*.scss', ['sass', 'minify-css']);
+    gulp.watch('src/assets/scss/*.scss', ['sass']);
     gulp.watch('src/assets/js/**/*.js', ['scripts']);
 });
 
 
 // Default Task
-gulp.task('default', ['sass', 'minify-css', 'scripts']);
+gulp.task('default', ['sass', 'scripts']);

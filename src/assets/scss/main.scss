@@ -1,3 +1,34 @@
-body {
-    background: blue;
+html, body {
+    height: 100%;
+}
+
+section {
+    &:first-child {
+        height: 100%;
+        display: flex;
+        align-items: center;
+
+        h1 {
+            background: url(http://45.media.tumblr.com/ebd340041630a2360a69996e5b24539d/tumblr_nnhg7mgOh41snv52fo1_500.gif) 0 0 no-repeat;
+            background-size: cover;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            word-break: break-all;
+            font-size: 20vw;
+            text-align: center;
+            line-height: 0.7;
+        }
+    }
+}
+
+body > .container-fluid {
+    height: 100%;
+}
+
+.social {
+    text-align: center;
+
+    .fb-like {
+        top: -6px;
+    }
 }
