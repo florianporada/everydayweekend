@@ -1,0 +1,19 @@
+{
+  "name": "everydayweekend",
+  "version": "1.0.0",
+  "description": "landing-page for everydayweekend.net",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/florianporada/everydayweekend.git"
+  },
+  "author": "florian porada",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/florianporada/everydayweekend/issues"
+  },
+  "homepage": "https://github.com/florianporada/everydayweekend#readme"
+}
