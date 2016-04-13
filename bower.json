@@ -20,6 +20,7 @@
     "jquery": "~2.2.3",
     "bootstrap": "v4.0.0-alpha.2",
     "tether": "~1.2.0",
-    "font-awesome": "~4.6.1"
+    "font-awesome": "~4.6.1",
+    "fullpage.js": "~2.7.9"
   }
 }

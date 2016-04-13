@@ -12,6 +12,7 @@ var cleanCSS = require('gulp-clean-css');
 var jshint = require('gulp-jshint');
 var rename = require('gulp-rename');
 var inject = require('gulp-inject');
+var uglify = require('gulp-uglify');
 var series = require('stream-series');
 
 
@@ -29,19 +30,21 @@ var assets = {
     scss: [
         assetPath.src + '/scss/**/*.scss'
     ],
+    fonts: [
+        assetPath.bower + '/font-awesome/fonts/*.{otf,eot,svg,ttf,woff,woff2}'
+    ],
     bower: {
         js: [
             assetPath.bower + '/jquery/dist/jquery.min.js',
             assetPath.bower + '/tether/dist/js/tether.min.js',
-            assetPath.bower + '/bootstrap/dist/js/bootstrap.min.js'
+            assetPath.bower + '/bootstrap/dist/js/bootstrap.min.js',
+            assetPath.bower + '/fullpage.js/dist/jquery.fullpage.min.js'
         ],
         css: [
             assetPath.bower + '/bootstrap/dist/css/bootstrap.min.css',
             assetPath.bower + '/tether/dist/css/tether.min.css',
-            assetPath.bower + '/font-awesome/css/font-awesome.min.css'
-        ],
-        fonts: [
-            assetPath.bower + '/font-awesome/fonts/*.{otf,eot,svg,ttf,woff,woff2}'
+            assetPath.bower + '/font-awesome/css/font-awesome.min.css',
+            assetPath.bower + '/fullpage.js/dist/jquery.fullpage.min.css'
         ]
 
     }
@@ -83,10 +86,17 @@ gulp.task('inject-prod', function () {
     injector(buildPath)
 });
 
+// Copy index Task
+gulp.task('copy-index', function () {
+    gulp.src('./index.html')
+        .pipe(gulp.dest(buildPath));
+});
+
 // Sass Task + minify
-gulp.task('sass', function () {
+gulp.task('styles', function () {
     gulp.src(assets.scss)
         .pipe(sass().on('error', sass.logError))
+        .pipe(concat('styles.css'))
         .pipe(cleanCSS({compatibility: 'ie8'}))
         .pipe(dest(assetPath.dist + '/css', {ext: '.min.css'}))
         .pipe(gulp.dest('./'));
@@ -95,7 +105,7 @@ gulp.task('sass', function () {
 // JS Task + minify
 gulp.task('scripts', function() {
     gulp.src(assets.js)
-        // .pipe(concat('main.js'))
+        .pipe(concat('scripts.js'))
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
         .pipe(minify({
@@ -104,39 +114,54 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest(assetPath.dist + '/js'));
 });
 
+// Vendor Scripts + minify + concat
+gulp.task('vscripts', function() {
+    gulp.src(assets.bower.js)
+        .pipe(concat('vscripts.js'))
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'))
+        .pipe(minify({
+            noSource: true
+        }))
+        .pipe(gulp.dest(assetPath.dist + '/js'));
+});
+
+// Vendor CSS + minify + concat
+gulp.task('vstyles', function() {
+    gulp.src(assets.bower.css)
+        .pipe(concat('vstyles.css'))
+        .pipe(cleanCSS({compatibility: 'ie8'}))
+        .pipe(dest(assetPath.dist + '/css', {ext: '.min.css'}))
+        .pipe(gulp.dest('./'))
+});
+
 // Build Task
-gulp.task('build', ['scripts', 'sass'], function() {
+gulp.task('build', ['vscripts', 'vstyles', 'scripts', 'styles'], function() {
     // Image-files
     gulp.src(assetPath.src  + '/img/*')
         .pipe(gulp.dest(assetPath.dist + '/img'));
-    // JS vendors
-    gulp.src(assets.bower.js)
-        .pipe(gulp.dest(assetPath.dist + '/js'));
-    // CSS vendors
-    gulp.src(assets.bower.css)
-        .pipe(gulp.dest(assetPath.dist + '/css'));
-    // Font vendors
-    gulp.src(assets.bower.fonts)
+    // Fonts
+    gulp.src(assets.fonts)
         .pipe(gulp.dest(assetPath.dist + '/fonts'));
 });
 
 // Build-Dev
-gulp.task('build-dev', ['scripts', 'sass', 'build', 'inject-dev'], function() {
+gulp.task('build-dev', ['scripts', 'styles', 'build', 'inject-dev'], function() {
     console.log('Finished: build-dev')
 });
 
 // Build-Dev
-gulp.task('build-prod', ['scripts', 'sass', 'build', 'inject-prod'], function() {
+gulp.task('build-prod', ['scripts', 'styles', 'build', 'copy-index', 'inject-prod'], function() {
     console.log('Finished: build-prod');
 });
 
 
 // Watcher
 gulp.task('watch', function() {
-    gulp.watch(assetPath.src + '/scss/**/*.scss', ['sass']);
+    gulp.watch(assetPath.src + '/scss/**/*.scss', ['styles']);
     gulp.watch(assetPath.src + '/js/**/*.js', ['scripts']);
 });
 
 
 // Default Task
-gulp.task('default', ['sass', 'scripts', 'inject']);
+gulp.task('default', ['styles', 'scripts', 'build']);

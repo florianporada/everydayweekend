@@ -2,14 +2,19 @@ html, body {
     height: 100%;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    text-align: center;
+}
+
 section {
-    &:first-child {
-        height: 100%;
+    height: 100vh;
+
+    &:first-of-type {
         display: flex;
         align-items: center;
 
         h1 {
-            background: url(http://45.media.tumblr.com/ebd340041630a2360a69996e5b24539d/tumblr_nnhg7mgOh41snv52fo1_500.gif) 0 0 no-repeat;
+            background: url("http://45.media.tumblr.com/ebd340041630a2360a69996e5b24539d/tumblr_nnhg7mgOh41snv52fo1_500.gif") 0 0 no-repeat;
             background-size: cover;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -19,14 +24,39 @@ section {
             border-bottom: solid 1px black;
         }
     }
-}
 
-h1, h2, h3, h4, h5, h6 {
-    text-align: center;
-}
+    &:nth-of-type(2) {
 
-body > .container-fluid {
-    height: 100%;
+    }
+
+    &:last-of-type {
+        background: url("http://i.imgur.com/pBOjCxJ.gif") 0 0 no-repeat;
+        background-size: cover;
+
+        span {
+            color: white;
+            box-shadow: none;
+
+            &:hover {
+                cursor: pointer;
+            }
+
+        }
+
+        .popover-footer {
+            text-align: center;
+            display: none;
+            border: none;
+            position: absolute;
+            left: 50%;
+            top: 110%;
+            transform: translateX(-50%);
+
+            .popover-title {
+                background: #fff;
+            }
+        }
+    }
 }
 
 .social {
