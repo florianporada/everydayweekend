@@ -5,7 +5,7 @@
         initDOM();
         initFullPage(content);
         initBackgroundChanger(content);
-        initPopover(content);
+        initPopover(body);
     });
 
     function initDOM() {
@@ -37,11 +37,12 @@
 
     function initPopover(dom) {
         var popover = dom.find('.popover-footer');
-        dom.find('.popover-open').clickToggle(function() {
+        dom.find('.popover-open').click(function() {
             popover.fadeIn();
-        }, function() {
-            popover.fadeOut();
         });
+        popover.click(function() {
+            popover.fadeOut()
+        })
     }
 
     //Spam protection

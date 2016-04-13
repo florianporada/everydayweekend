@@ -42,20 +42,24 @@ section {
             }
 
         }
+    }
+}
 
-        .popover-footer {
-            text-align: center;
-            display: none;
-            border: none;
-            position: absolute;
-            left: 50%;
-            top: 110%;
-            transform: translateX(-50%);
+.popover-footer {
+    text-align: center;
+    display: none;
+    border: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
 
-            .popover-title {
-                background: #fff;
-            }
-        }
+    &:hover {
+        cursor: pointer;
+    }
+
+    .popover-title {
+        background: #fff;
     }
 }
 
