@@ -21,10 +21,12 @@
     "gulp-clean-css": "^2.0.6",
     "gulp-concat": "^2.6.0",
     "gulp-dest": "^0.2.3",
+    "gulp-inject": "^4.0.0",
     "gulp-jshint": "^2.0.0",
     "gulp-minify": "0.0.7",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.2.0",
-    "jshint": "^2.9.1"
+    "jshint": "^2.9.1",
+    "stream-series": "^0.1.1"
   }
 }
