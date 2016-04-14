@@ -31,8 +31,8 @@
         el.each(function() {
             $(this).css({
                 backgroundImage: 'url("' + bg + '")'
-            })
-        })
+            });
+        });
     }
 
     function initPopover(dom) {
@@ -41,8 +41,8 @@
             popover.fadeIn();
         });
         popover.click(function() {
-            popover.fadeOut()
-        })
+            popover.fadeOut();
+        });
     }
 
     //Spam protection
