@@ -1,6 +1,3 @@
-/**
- * Created by florianporada on 12.04.16.
- */
 'use strict';
 
 var fs = require('fs');
@@ -101,8 +98,6 @@ gulp.task('vstyles', function() {
 gulp.task('vscripts', function() {
     gulp.src(assets.vendor.js)
         .pipe(concat('vscripts.js'))
-        // .pipe(jshint())
-        // .pipe(jshint.reporter('default'))
         .pipe(rename('vscripts.min.js'))
         .pipe(uglify({
             preserveComments: 'license'
@@ -111,7 +106,7 @@ gulp.task('vscripts', function() {
 });
 
 // Build Task
-gulp.task('build', ['vscripts', 'vstyles', 'scripts', 'styles'], function() {
+gulp.task('build', ['vscripts', 'vstyles', 'scripts', 'styles', 'inject-dev'], function() {
     // Image-files
     gulp.src(assetPath.src  + '/img/*')
         .pipe(gulp.dest(assetPath.dist + '/img'));
@@ -120,13 +115,8 @@ gulp.task('build', ['vscripts', 'vstyles', 'scripts', 'styles'], function() {
         .pipe(gulp.dest(assetPath.dist + '/fonts'));
 });
 
-// Build-Dev
-gulp.task('build-dev', ['build', 'inject-dev'], function() {
-    console.log('Finished: build-dev')
-});
-
-// Build-Prod
-gulp.task('build-prod', ['build', 'inject-prod'], function() {
+// Build-Dist
+gulp.task('build-dist', ['build', 'inject-prod'], function() {
     console.log('Finished: build-prod')
 });
 
