@@ -1,0 +1,26 @@
+{
+  "js": [
+    "./src/assets/js/**/*.js"
+  ],
+  "scss": [
+    "./src/assets/scss/**/*.scss"
+  ],
+  "fonts": [
+    "./bower_components/font-awesome/fonts/*.{otf,eot,svg,ttf,woff,woff2}"
+  ],
+  "vendor": {
+    "js": [
+      "./bower_components/jquery/dist/jquery.min.js",
+      "./bower_components/tether/dist/js/tether.min.js",
+      "./bower_components/bootstrap/dist/js/bootstrap.min.js",
+      "./bower_components/fullpage.js/dist/jquery.fullpage.min.js"
+    ],
+    "css": [
+      "./bower_components/bootstrap/dist/css/bootstrap.min.css",
+      "./bower_components/bootstrap/dist/css/bootstrap.min.css",
+      "./bower_components/tether/dist/css/tether.min.css",
+      "./bower_components/font-awesome/css/font-awesome.min.css",
+      "./bower_components/fullpage.js/dist/jquery.fullpage.min.css"
+    ]
+  }
+}

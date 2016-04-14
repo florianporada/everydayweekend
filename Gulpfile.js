@@ -14,42 +14,34 @@ var rename = require('gulp-rename');
 var inject = require('gulp-inject');
 var uglify = require('gulp-uglify');
 var series = require('stream-series');
+var saveLicense = require('uglify-save-license');
 
-
+var dependencies = JSON.parse(fs.readFileSync('./dependencies.json', 'utf8'));
 var srcPath = './src',
     buildPath = './build',
     assetPath = {
         src: srcPath + '/assets',
-        dist: buildPath + '/assets',
-        bower: './bower_components'
+        dist: buildPath + '/assets'
+    },
+    assets = {
+        js: [],
+        scss: [],
+        fonts: [],
+        vendor: {
+            js: [],
+            css: []
+        }
     };
 
-var assets = {
-    js: [
-        assetPath.src + '/js/**/*.js'
-    ],
-    scss: [
-        assetPath.src + '/scss/**/*.scss'
-    ],
-    fonts: [
-        assetPath.bower + '/font-awesome/fonts/*.{otf,eot,svg,ttf,woff,woff2}'
-    ],
-    bower: {
-        js: [
-            assetPath.bower + '/jquery/dist/jquery.min.js',
-            assetPath.bower + '/tether/dist/js/tether.min.js',
-            assetPath.bower + '/bootstrap/dist/js/bootstrap.min.js',
-            assetPath.bower + '/fullpage.js/dist/jquery.fullpage.min.js'
-        ],
-        css: [
-            assetPath.bower + '/bootstrap/dist/css/bootstrap.min.css',
-            assetPath.bower + '/tether/dist/css/tether.min.css',
-            assetPath.bower + '/font-awesome/css/font-awesome.min.css',
-            assetPath.bower + '/fullpage.js/dist/jquery.fullpage.min.css'
-        ]
-
-    }
-};
+if (dependencies !== 'undefined') {
+    assets.js = dependencies.js;
+    assets.scss = dependencies.scss;
+    assets.fonts = dependencies.fonts;
+    assets.vendor.js = dependencies.vendor.js;
+    assets.vendor.css = dependencies.vendor.css;
+} else {
+    new Error('no dependencies.json found');
+}
 
 function injector(path) {
     var vendorStream = gulp.src([assetPath.dist + '/js/vscripts.*', assetPath.dist + '/css/vstyles.*'], {read: false}),
@@ -61,15 +53,19 @@ function injector(path) {
         .pipe(gulp.dest(path + '/'));
 }
 
+// @TODO: wait till files exits instead of timeout
 // Inject Task (dev)
 gulp.task('inject-dev', function () {
-    injector('.')
+    setTimeout(function() {
+        injector('.');
+    }, 5000);
 });
 
 // Inject Task (prod)
 gulp.task('inject-prod', function () {
-    injector(buildPath)
-});
+    setTimeout(function() {
+        injector(buildPath);
+    }, 5000);});
 
 // Sass Task + minify + concat
 gulp.task('styles', function () {
@@ -79,15 +75,6 @@ gulp.task('styles', function () {
         .pipe(cleanCSS({compatibility: 'ie8'}))
         .pipe(dest(assetPath.dist + '/css', {ext: '.min.css'}))
         .pipe(gulp.dest('./'));
-});
-
-// Vendor CSS + minify + concat
-gulp.task('vstyles', function() {
-    gulp.src(assets.bower.css)
-        .pipe(concat('vstyles.css'))
-        .pipe(cleanCSS({compatibility: 'ie8'}))
-        .pipe(dest(assetPath.dist + '/css', {ext: '.min.css'}))
-        .pipe(gulp.dest('./'))
 });
 
 // JS Task + minify + concat
@@ -101,14 +88,25 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest(assetPath.dist + '/js'));
 });
 
+// Vendor CSS + minify + concat
+gulp.task('vstyles', function() {
+    gulp.src(assets.vendor.css)
+        .pipe(concat('vstyles.css'))
+        .pipe(cleanCSS({compatibility: 'ie8'}))
+        .pipe(dest(assetPath.dist + '/css', {ext: '.min.css'}))
+        .pipe(gulp.dest('./'))
+});
+
 // Vendor Scripts + minify + concat
 gulp.task('vscripts', function() {
-    gulp.src(assets.bower.js)
+    gulp.src(assets.vendor.js)
         .pipe(concat('vscripts.js'))
         // .pipe(jshint())
         // .pipe(jshint.reporter('default'))
         .pipe(rename('vscripts.min.js'))
-        .pipe(uglify())
+        .pipe(uglify({
+            preserveComments: 'license'
+        }))
         .pipe(gulp.dest(assetPath.dist + '/js'));
 });
 
