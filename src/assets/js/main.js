@@ -4,7 +4,7 @@
     $(document).ready(function(){
         initDOM();
         initFullPage(content);
-        initBackgroundChanger(content);
+        initGifs();
         initPopover(body);
     });
 
@@ -20,19 +20,43 @@
             sectionSelector: 'section'
         });
     }
-    
-    function initBackgroundChanger(dom) {
-        var el = dom.find('.bg-change'),
-            bgs = [
-                'https://media.giphy.com/media/xT1XGPm6RZ01MvmtNK/giphy.gif'
-            ],
-            bg = bgs[Math.floor(Math.random() * bgs.length)];
 
-        el.each(function() {
-            $(this).css({
-                backgroundImage: 'url("' + bg + '")'
+    function initGifs() {
+        var xhr = $.get('http://api.giphy.com/v1/gifs/search?q=cinemagraph+movie&api_key=dc6zaTOxFJmzC'),
+            fallback = [
+                'assets/img/giphy_1.gif',
+                'assets/img/giphy_2.gif',
+                'assets/img/giphy_3.gif',
+                'assets/img/giphy_4.gif'
+            ];
+
+        xhr.done(function(res) {
+            var array = [];
+            res.data.forEach(function(obj) {
+                array.push(obj.images.original.url);
             });
+            initBackgroundChanger(content, array);
         });
+
+        xhr.fail(function() {
+            initBackgroundChanger(content, fallback);
+        });
+
+    }
+    
+    function initBackgroundChanger(dom, array) {
+        var el = dom.find('.bg-change'),
+            change = function() {
+                var bg = array[Math.floor(Math.random() * array.length)];
+                el.each(function() {
+                    $(this).css({
+                        backgroundImage: 'url("' + bg + '")'
+                    });
+                });
+                el.fadeTo(3000, 1);
+            };
+
+        change();
     }
 
     function initPopover(dom) {

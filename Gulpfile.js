@@ -44,25 +44,28 @@ function injector(path) {
     var vendorStream = gulp.src([assetPath.dist + '/js/vscripts.*', assetPath.dist + '/css/vstyles.*'], {read: false}),
         srcStream = gulp.src([assetPath.dist + '/js/scripts.*', assetPath.dist + '/css/styles.*'], {read: false});
 
-    gulp.src('./index.html')
+    gulp.src(path + '/index.html')
         .pipe(gulp.dest(path + '/'))
         .pipe(inject(series(vendorStream, srcStream), {relative: true}))
         .pipe(gulp.dest(path + '/'));
 }
 
-// @TODO: wait till files exits instead of timeout
+// TODO: wait till files exits instead of timeout
 // Inject Task (dev)
 gulp.task('inject-dev', function () {
     setTimeout(function() {
-        injector('.');
+        injector(srcPath);
     }, 5000);
 });
 
 // Inject Task (prod)
 gulp.task('inject-prod', function () {
+    gulp.src(srcPath  + '/index.html')
+        .pipe(gulp.dest(buildPath));
     setTimeout(function() {
         injector(buildPath);
-    }, 5000);});
+    }, 5000);}
+);
 
 // Sass Task + minify + concat
 gulp.task('styles', function () {

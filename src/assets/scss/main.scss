@@ -8,20 +8,19 @@ h1, h2, h3, h4, h5, h6 {
 
 section {
     height: 100vh;
+    display: flex;
+    align-items: center;
 
     &:first-of-type {
-        display: flex;
-        align-items: center;
 
-        h1 {
-            background: url("http://45.media.tumblr.com/ebd340041630a2360a69996e5b24539d/tumblr_nnhg7mgOh41snv52fo1_500.gif") 0 0 no-repeat;
-            background-size: cover;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            word-break: break-all;
-            font-size: 20vw;
-            line-height: 0.7;
-            border-bottom: solid 1px black;
+
+        h3 {
+            opacity: 0;
+        }
+
+        img {
+            width: 65vw;
+            margin-bottom: 5px;
         }
     }
 
@@ -30,9 +29,6 @@ section {
     }
 
     &:last-of-type {
-        background: url("http://i.imgur.com/pBOjCxJ.gif") 0 0 no-repeat;
-        background-size: cover;
-
         span {
             color: white;
             box-shadow: none;
@@ -61,6 +57,12 @@ section {
     .popover-title {
         background: #fff;
     }
+}
+
+.bg-change {
+    background: url('https://media.giphy.com/media/26FPOipKCo0ClslsQ/giphy.gif') 0 0 no-repeat;
+    background-size: cover;
+    opacity: 0;
 }
 
 .social {
